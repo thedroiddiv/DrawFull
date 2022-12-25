@@ -15,22 +15,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull.ui.helper
+package com.dxn.drawfull.drawing.helper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 
-class Drawing {
+class Drawing(
+    private var color: Color,
+    private var width: Float,
+    private var alpha: Float
+) {
 
     private val _undoList = mutableStateListOf<DrawingStroke>()
     val strokes: SnapshotStateList<DrawingStroke> get() = _undoList
     private val _redoList = mutableStateListOf<DrawingStroke>()
 
     fun addNewFreeHandStroke(offset: Offset) {
-        val stroke = DrawingStroke.FreeHand(mutableStateListOf(offset))
+        val stroke = DrawingStroke.FreeHand(mutableStateListOf(offset), color, width, alpha)
         _undoList.add(stroke)
     }
 
@@ -43,11 +48,11 @@ class Drawing {
     }
 
     fun addSquare(center: Offset, radius: Float) {
-        _undoList.add(DrawingStroke.Square(center, radius))
+        _undoList.add(DrawingStroke.Square(center, radius, color, width, alpha))
     }
 
     fun addCircle(center: Offset, radius: Float) {
-        _undoList.add(DrawingStroke.Circle(center, radius))
+        _undoList.add(DrawingStroke.Circle(center, radius, color, width, alpha))
     }
 
     fun undo() {
@@ -66,9 +71,17 @@ class Drawing {
         _undoList.clear()
         _redoList.clear()
     }
+
+    fun setColor(color: Color) = run { this.color = color }
+    fun setWidth(width: Float) = run { this.width = width }
+    fun setAlpha(alpha: Float) = run { this.alpha = alpha }
 }
 
 @Composable
-fun rememberDrawing(): Drawing {
-    return remember { Drawing() }
+fun rememberDrawing(
+    color: Color = Color.Red,
+    width: Float = 4f,
+    alpha: Float = 1f
+): Drawing {
+    return remember { Drawing(color, width, alpha) }
 }

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull.ui.components
+package com.dxn.drawfull.drawing.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -28,9 +28,9 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import com.dxn.drawfull.ui.helper.Drawing
-import com.dxn.drawfull.ui.helper.DrawingStroke
-import com.dxn.drawfull.ui.helper.drawQuadraticBezier
+import com.dxn.drawfull.drawing.helper.Drawing
+import com.dxn.drawfull.drawing.helper.DrawingStroke
+import com.dxn.drawfull.drawing.helper.drawQuadraticBezier
 
 @Composable
 fun FreeHandCanvas(

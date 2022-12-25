@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull.ui.helper
+package com.dxn.drawfull.drawing.helper
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path

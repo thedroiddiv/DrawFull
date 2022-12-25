@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull.ui.helper
+package com.dxn.drawfull.drawing.helper
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.geometry.Offset
@@ -28,16 +28,16 @@ sealed class DrawingStroke(
 ) {
     class FreeHand(
         val points: SnapshotStateList<Offset>,
-        color: Color = Color.Green,
-        width: Float = 4f,
-        alpha: Float = 1f
+        color: Color,
+        width: Float,
+        alpha: Float
     ) : DrawingStroke(color, width, alpha)
 
     open class Polygon(
         val points: SnapshotStateList<Offset>,
         color: Color = Color.Green,
-        width: Float = 4f,
-        alpha: Float = 1f
+        width: Float,
+        alpha: Float
     ) : DrawingStroke(color, width, alpha) {
         init {
             points.add(points[0]) // add the first point at last
@@ -48,23 +48,23 @@ sealed class DrawingStroke(
         val center: Offset,
         val radius: Float,
         color: Color = Color.Green,
-        width: Float = 4f,
-        alpha: Float = 1f
+        width: Float,
+        alpha: Float
     ) : DrawingStroke(color, width, alpha)
 
     class Rectangle(
         val topLeft: Offset,
         val bottomRight: Offset,
         color: Color = Color.Green,
-        width: Float = 4f,
-        alpha: Float = 1f
+        width: Float,
+        alpha: Float
     ) : DrawingStroke(color, width, alpha)
 
     class Circle(
         val center: Offset,
         val radius: Float,
         color: Color = Color.Green,
-        width: Float = 4f,
-        alpha: Float = 1f
+        width: Float,
+        alpha: Float
     ) : DrawingStroke(color, width, alpha)
 }

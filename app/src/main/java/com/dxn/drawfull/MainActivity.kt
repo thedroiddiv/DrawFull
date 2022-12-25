@@ -34,8 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import com.dxn.drawfull.ui.components.FreeHandCanvas
-import com.dxn.drawfull.ui.helper.rememberDrawing
+import com.dxn.drawfull.drawing.components.FreeHandCanvas
+import com.dxn.drawfull.drawing.helper.rememberDrawing
 import com.dxn.drawfull.ui.theme.DrawFullTheme
 
 
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DrawFullTheme() {
+            DrawFullTheme {
                 var pointPickingMode by remember { mutableStateOf(PointPickMode.NONE) }
                 var selectedPoint by remember { mutableStateOf<Offset?>(null) }
 
