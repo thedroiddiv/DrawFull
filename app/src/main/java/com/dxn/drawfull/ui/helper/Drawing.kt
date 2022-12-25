@@ -1,4 +1,4 @@
-package com.dxn.imageannonator.ui.helper
+package com.dxn.drawfull.ui.helper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf

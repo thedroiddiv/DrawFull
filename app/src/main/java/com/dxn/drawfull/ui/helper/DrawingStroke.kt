@@ -1,4 +1,4 @@
-package com.dxn.imageannonator.ui.helper
+package com.dxn.drawfull.ui.helper
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.geometry.Offset

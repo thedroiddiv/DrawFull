@@ -1,4 +1,4 @@
-package com.dxn.imageannonator.ui.components
+package com.dxn.drawfull.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -11,9 +11,9 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import com.dxn.imageannonator.ui.helper.Drawing
-import com.dxn.imageannonator.ui.helper.DrawingStroke
-import com.dxn.imageannonator.ui.helper.drawQuadraticBezier
+import com.dxn.drawfull.ui.helper.Drawing
+import com.dxn.drawfull.ui.helper.DrawingStroke
+import com.dxn.drawfull.ui.helper.drawQuadraticBezier
 
 @Composable
 fun FreeHandCanvas(

@@ -1,4 +1,4 @@
-package com.dxn.imageannonator
+package com.dxn.drawfull
 
 import org.junit.Test
 

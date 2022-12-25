@@ -1,4 +1,4 @@
-package com.dxn.imageannonator
+package com.dxn.drawfull
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import com.dxn.imageannonator.ui.components.FreeHandCanvas
-import com.dxn.imageannonator.ui.helper.rememberDrawing
-import com.dxn.imageannonator.ui.theme.ImageAnnonatorTheme
+import com.dxn.drawfull.ui.components.FreeHandCanvas
+import com.dxn.drawfull.ui.helper.rememberDrawing
+import com.dxn.drawfull.ui.theme.DrawFullTheme
 
 
 enum class PointPickMode {
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ImageAnnonatorTheme {
+            DrawFullTheme() {
                 var pointPickingMode by remember { mutableStateOf(PointPickMode.NONE) }
                 var selectedPoint by remember { mutableStateOf<Offset?>(null) }
 
