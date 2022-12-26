@@ -20,103 +20,193 @@ package com.dxn.drawfull
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.dxn.drawfull.color.ColorPicker
+import com.dxn.drawfull.color.colors
 import com.dxn.drawfull.drawing.components.FreeHandCanvas
+import com.dxn.drawfull.drawing.helper.DrawMode
 import com.dxn.drawfull.drawing.helper.rememberDrawing
 import com.dxn.drawfull.ui.theme.DrawFullTheme
-
-
-enum class PointPickMode {
-    NONE, SQUARE, CIRCLE
-}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             DrawFullTheme {
-                var pointPickingMode by remember { mutableStateOf(PointPickMode.NONE) }
-                var selectedPoint by remember { mutableStateOf<Offset?>(null) }
+                val drawing = rememberDrawing()
+
+                var boxHeightPx by remember { mutableStateOf(0f) }
+                var offset by remember { mutableStateOf(boxHeightPx) }
+                val offsetAnim = animateFloatAsState(targetValue = offset)
+
+                val toggleColorPicker: () -> Unit = {
+                    offset = if (offset == 0f) {
+                        boxHeightPx
+                    } else {
+                        0f
+                    }
+                }
 
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-                    val drawing = rememberDrawing()
-                    Box(
+                    FreeHandCanvas(
                         modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        drawing = drawing
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .graphicsLayer {
+                                translationY = offsetAnim.value
+                            }
                             .fillMaxWidth()
-                            .weight(1f)
+                            .background(
+                                MaterialTheme.colorScheme.primaryContainer,
+                                RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+                            )
                     ) {
-                        FreeHandCanvas(
-                            modifier = Modifier.fillMaxSize(),
-                            drawing = drawing
-                        )
-                        if (pointPickingMode != PointPickMode.NONE) {
-                            Box(
+                        Row(Modifier.padding(8.dp)) {
+                            IconButton(onClick = { drawing.clear() }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "Clear"
+                                )
+                            }
+                            IconButton(onClick = { drawing.undo() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = "Clear"
+                                )
+                            }
+                            IconButton(onClick = { drawing.redo() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowForward,
+                                    contentDescription = "Clear"
+                                )
+                            }
+                            IconButton(onClick = toggleColorPicker) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .background(drawing.color, CircleShape)
+                                )
+                            }
+                            DrawModeSelector(
                                 modifier = Modifier
-                                    .pointerInput(Unit) {
-                                        detectTapGestures {
-                                            selectedPoint = it
-                                            // drop the square on canvas
-                                            when (pointPickingMode) {
-                                                PointPickMode.CIRCLE -> {
-                                                    drawing.addCircle(it, 50f)
-                                                }
-                                                PointPickMode.SQUARE -> {
-                                                    drawing.addSquare(it, 50f)
-                                                }
-                                                else -> {}
-                                            }
-                                            pointPickingMode = PointPickMode.NONE
-                                        }
-                                    }
-                                    .fillMaxSize()
-                                    .background(Color.Black.copy(0.3f))
+                                    .weight(1f),
+                                selected = drawing.drawMode.value,
+                                onSelect = { drawing.setDrawMode(it) }
+                            )
+                        }
+                        Box(Modifier.onGloballyPositioned {
+                            boxHeightPx = it.size.height.toFloat()
+                        }
+                        ) {
+                            ColorPicker(
+                                colors = colors,
+                                selectedColor = drawing.color,
+                                onColorPicked = {
+                                    drawing.setColor(it)
+                                    toggleColorPicker()
+                                }
                             )
                         }
                     }
-                    Row {
-                        Button(onClick = { drawing.clear() }) {
-                            Text(text = "Clear")
-                        }
-                        Button(onClick = { drawing.undo() }) {
-                            Text(text = "Undo")
-                        }
-                        Button(onClick = { drawing.redo() }) {
-                            Text(text = "Redo")
-                        }
-                    }
-
-                    Row {
-                        Button(onClick = { pointPickingMode = PointPickMode.SQUARE }) {
-                            Text(text = "Square")
-                        }
-                        Button(onClick = { pointPickingMode = PointPickMode.CIRCLE }) {
-                            Text(text = "Circle")
-                        }
-                        Button(onClick = { drawing.redo() }) {
-                            Text(text = "Quad")
-                        }
-                    }
-
-                    Text(text = "(${selectedPoint?.x},${selectedPoint?.y})")
                 }
             }
         }
+    }
+}
+
+@Composable
+fun DrawModeSelector(
+    modifier: Modifier,
+    selected: DrawMode,
+    onSelect: (DrawMode) -> Unit
+) {
+    Row(
+        modifier
+            .background(MaterialTheme.colorScheme.primary, CircleShape)
+            .padding(horizontal = 8.dp)
+            .horizontalScroll(rememberScrollState())
+    ) {
+        DrawModeButton(drawMode = DrawMode.FREE_HAND, selected = selected, onSelect = onSelect) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_free_hand),
+                contentDescription = "free hand drawing",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+        DrawModeButton(drawMode = DrawMode.POLYGON, selected = selected, onSelect = onSelect) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_polygon),
+                contentDescription = "free hand drawing",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+        DrawModeButton(drawMode = DrawMode.CIRCLE, selected = selected, onSelect = onSelect) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .border(2.dp, MaterialTheme.colorScheme.onPrimary, CircleShape)
+            )
+        }
+        DrawModeButton(drawMode = DrawMode.SQUARE, selected = selected, onSelect = onSelect) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .border(2.dp, MaterialTheme.colorScheme.onPrimary)
+            )
+        }
+        DrawModeButton(drawMode = DrawMode.RECTANGLE, selected = selected, onSelect = onSelect) {
+            Box(
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(16.dp)
+                    .border(2.dp, MaterialTheme.colorScheme.onPrimary)
+            )
+        }
+    }
+}
+
+@Composable
+fun DrawModeButton(
+    drawMode: DrawMode,
+    selected: DrawMode,
+    onSelect: (DrawMode) -> Unit,
+    content: @Composable () -> Unit
+) {
+    val modifier = Modifier.apply {
+        if (selected == drawMode) background(MaterialTheme.colorScheme.primaryContainer)
+    }
+    Box(modifier) {
+        IconButton(
+            onClick = { onSelect(drawMode) }
+        ) { content() }
     }
 }

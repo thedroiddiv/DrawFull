@@ -21,7 +21,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -41,9 +40,11 @@ fun FreeHandCanvas(
         modifier = modifier
             .pointerInput(null) {
                 detectDragGestures(
-                    onDragStart = { drawing.addNewFreeHandStroke(it) },
+                    onDragStart = {
+                        drawing.startDrawing(it)
+                    },
                     onDrag = { change, _ ->
-                        drawing.continueFreeHandStroke(change.position)
+                        drawing.updateDrawing(change.position)
                     }
                 )
             }
@@ -77,15 +78,24 @@ fun FreeHandCanvas(
                     )
                 }
 
-                is DrawingStroke.Square -> {
-                    val topLeft = Offset(
-                        (stroke.center.x - stroke.radius),
-                        (stroke.center.y - stroke.radius)
-                    )
+                is DrawingStroke.Rectangle -> {
                     drawRect(
                         color = stroke.color,
-                        topLeft = topLeft,
-                        size = Size(stroke.radius * 2, stroke.radius * 2),
+                        topLeft = stroke.topLeft,
+                        size = Size(stroke.edgeWidth, stroke.edgeLength),
+                        style = Stroke(
+                            width = stroke.width,
+                            cap = StrokeCap.Round,
+                            join = StrokeJoin.Round
+                        )
+                    )
+                }
+
+                is DrawingStroke.Square -> {
+                    drawRect(
+                        color = stroke.color,
+                        topLeft = stroke.topLeft,
+                        size = Size(stroke.edgeLength, stroke.edgeLength),
                         style = Stroke(
                             width = stroke.width,
                             cap = StrokeCap.Round,

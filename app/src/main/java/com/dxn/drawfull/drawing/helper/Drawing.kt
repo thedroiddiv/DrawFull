@@ -17,42 +17,69 @@
 
 package com.dxn.drawfull.drawing.helper
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 
 class Drawing(
-    private var color: Color,
-    private var width: Float,
-    private var alpha: Float
+    private var _color: Color,
+    private var _width: Float,
+    private var _alpha: Float,
+    drawMode: DrawMode
 ) {
 
     private val _undoList = mutableStateListOf<DrawingStroke>()
     val strokes: SnapshotStateList<DrawingStroke> get() = _undoList
     private val _redoList = mutableStateListOf<DrawingStroke>()
+    private val _drawMode = mutableStateOf(drawMode)
 
-    fun addNewFreeHandStroke(offset: Offset) {
-        val stroke = DrawingStroke.FreeHand(mutableStateListOf(offset), color, width, alpha)
+    val color get() = _color
+    val width get() = _width
+    val alpha get() = _alpha
+    val drawMode: State<DrawMode> get() = _drawMode
+
+    fun startDrawing(offset: Offset) {
+        val stroke = when (_drawMode.value) {
+            DrawMode.CIRCLE -> DrawingStroke.Circle(offset, offset, color, width, alpha)
+            DrawMode.SQUARE -> DrawingStroke.Square(offset, offset, color, width, alpha)
+            DrawMode.RECTANGLE -> DrawingStroke.Rectangle(offset, offset, color, width, alpha)
+            DrawMode.POLYGON -> DrawingStroke.Rectangle(offset, offset, color, width, alpha)
+            DrawMode.FREE_HAND -> DrawingStroke.FreeHand(
+                mutableStateListOf(offset),
+                _color,
+                _width,
+                _alpha
+            )
+        }
         _undoList.add(stroke)
     }
 
-    fun continueFreeHandStroke(offset: Offset) {
+    fun updateDrawing(offset: Offset) {
         if (_undoList.isEmpty()) return
-        val lastStroke = _undoList[_undoList.lastIndex]
-        if (lastStroke is DrawingStroke.FreeHand) {
-            lastStroke.points.add(offset)
+        when (val lastStroke = _undoList.last()) {
+            is DrawingStroke.Circle -> {
+                val newCircle = DrawingStroke.Circle(lastStroke.poc1, offset, color, width, alpha)
+                _undoList.removeLast()
+                _undoList.add(newCircle)
+            }
+            is DrawingStroke.FreeHand -> {
+                lastStroke.points.add(offset)
+            }
+            is DrawingStroke.Polygon -> {
+
+            }
+            is DrawingStroke.Rectangle -> {
+                val newSquare = DrawingStroke.Rectangle(lastStroke.d1, offset, color, width, alpha)
+                _undoList.removeLast()
+                _undoList.add(newSquare)
+            }
+            is DrawingStroke.Square -> {
+                val newSquare = DrawingStroke.Square(lastStroke.d1, offset, color, width, alpha)
+                _undoList.removeLast()
+                _undoList.add(newSquare)
+            }
         }
-    }
-
-    fun addSquare(center: Offset, radius: Float) {
-        _undoList.add(DrawingStroke.Square(center, radius, color, width, alpha))
-    }
-
-    fun addCircle(center: Offset, radius: Float) {
-        _undoList.add(DrawingStroke.Circle(center, radius, color, width, alpha))
     }
 
     fun undo() {
@@ -72,16 +99,18 @@ class Drawing(
         _redoList.clear()
     }
 
-    fun setColor(color: Color) = run { this.color = color }
-    fun setWidth(width: Float) = run { this.width = width }
-    fun setAlpha(alpha: Float) = run { this.alpha = alpha }
+    fun setColor(color: Color) = run { this._color = color }
+    fun setWidth(width: Float) = run { this._width = width }
+    fun setAlpha(alpha: Float) = run { this._alpha = alpha }
+    fun setDrawMode(drawMode: DrawMode) = run { this._drawMode.value = drawMode }
 }
 
 @Composable
 fun rememberDrawing(
     color: Color = Color.Red,
     width: Float = 4f,
-    alpha: Float = 1f
+    alpha: Float = 1f,
+    drawMode: DrawMode = DrawMode.FREE_HAND
 ): Drawing {
-    return remember { Drawing(color, width, alpha) }
+    return remember { Drawing(color, width, alpha, drawMode) }
 }
