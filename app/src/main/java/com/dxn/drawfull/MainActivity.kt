@@ -37,6 +37,8 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
@@ -120,7 +122,8 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .weight(1f),
                                 selected = drawing.drawMode.value,
-                                onSelect = { drawing.setDrawMode(it) }
+                                onSelect = { drawing.setDrawMode(it) },
+                                polygonSides = 5
                             )
                         }
                         Box(Modifier.onGloballyPositioned {
@@ -147,12 +150,13 @@ class MainActivity : ComponentActivity() {
 fun DrawModeSelector(
     modifier: Modifier,
     selected: DrawMode,
+    polygonSides: Int,
     onSelect: (DrawMode) -> Unit
 ) {
     Row(
         modifier
+            .clip(CircleShape)
             .background(MaterialTheme.colorScheme.primary, CircleShape)
-            .padding(horizontal = 8.dp)
             .horizontalScroll(rememberScrollState())
     ) {
         DrawModeButton(drawMode = DrawMode.FREE_HAND, selected = selected, onSelect = onSelect) {
@@ -162,7 +166,11 @@ fun DrawModeSelector(
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
-        DrawModeButton(drawMode = DrawMode.POLYGON, selected = selected, onSelect = onSelect) {
+        DrawModeButton(
+            drawMode = DrawMode.POLYGON(polygonSides),
+            selected = selected,
+            onSelect = onSelect
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_polygon),
                 contentDescription = "free hand drawing",
@@ -201,12 +209,13 @@ fun DrawModeButton(
     onSelect: (DrawMode) -> Unit,
     content: @Composable () -> Unit
 ) {
-    val modifier = Modifier.apply {
-        if (selected == drawMode) background(MaterialTheme.colorScheme.primaryContainer)
-    }
-    Box(modifier) {
-        IconButton(
-            onClick = { onSelect(drawMode) }
-        ) { content() }
-    }
+    IconButton(
+        modifier = Modifier
+            .padding(4.dp)
+            .background(
+                color = if (selected::class.java == drawMode::class.java) Color.Red else Color.Transparent,
+                shape = CircleShape
+            ),
+        onClick = { onSelect(drawMode) }
+    ) { content() }
 }

@@ -44,7 +44,15 @@ class Drawing(
             DrawMode.CIRCLE -> DrawingStroke.Circle(offset, offset, color, width, alpha)
             DrawMode.SQUARE -> DrawingStroke.Square(offset, offset, color, width, alpha)
             DrawMode.RECTANGLE -> DrawingStroke.Rectangle(offset, offset, color, width, alpha)
-            DrawMode.POLYGON -> DrawingStroke.Rectangle(offset, offset, color, width, alpha)
+            is DrawMode.POLYGON -> {
+                val edges = getVertices(0f, offset, (_drawMode.value as DrawMode.POLYGON).sides)
+                DrawingStroke.Polygon(
+                    edges,
+                    _color,
+                    _width,
+                    _alpha
+                )
+            }
             DrawMode.FREE_HAND -> DrawingStroke.FreeHand(
                 mutableStateListOf(offset),
                 _color,
@@ -67,7 +75,15 @@ class Drawing(
                 lastStroke.points.add(offset)
             }
             is DrawingStroke.Polygon -> {
-
+                val p1 = lastStroke.points[0]
+                val p2 = offset
+                val radius = calculateDistance(p1, p2) / 2
+                val center = calculateMidPoint(p1, p2)
+                val sides = 5
+                val edges = getVertices(radius, center, sides)
+                val newPolygon = DrawingStroke.Polygon(edges, color, width, alpha)
+                _undoList.removeLast()
+                _undoList.add(newPolygon)
             }
             is DrawingStroke.Rectangle -> {
                 val newSquare = DrawingStroke.Rectangle(lastStroke.d1, offset, color, width, alpha)

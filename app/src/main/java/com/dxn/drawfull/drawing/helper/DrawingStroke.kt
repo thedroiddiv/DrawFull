@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+
 sealed class DrawingStroke(
     val color: Color,
     val width: Float,
@@ -36,7 +37,7 @@ sealed class DrawingStroke(
     ) : DrawingStroke(color, width, alpha)
 
     open class Polygon(
-        val points: SnapshotStateList<Offset>,
+        val points: MutableList<Offset>,
         color: Color = Color.Green,
         width: Float,
         alpha: Float
@@ -143,4 +144,16 @@ fun getTopLeftAndBottomRight(d1: Offset, d2: Offset): Pair<Offset, Offset> {
             Pair(Offset(x2, y2), Offset(x1, y1))
         }
     }
+}
+
+fun getVertices(radius: Float, center: Offset, sides: Int): MutableList<Offset> {
+    val vertices = mutableListOf<Offset>()
+    val x = center.x
+    val y = center.y
+    for (i in 0 until sides) {
+        val x1 = (x + radius * Math.cos(2 * Math.PI * i / sides)).toFloat()
+        val y1 = (y + radius * Math.sin(2 * Math.PI * i / sides)).toFloat()
+        vertices.add(Offset(x1, y1))
+    }
+    return vertices
 }
