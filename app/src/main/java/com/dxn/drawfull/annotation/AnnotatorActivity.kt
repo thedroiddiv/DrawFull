@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import coil.compose.rememberImagePainter
+import com.dxn.drawfull.annot.ZoomableImage
 import com.dxn.drawfull.annotation.destinations.ImageAnnotatorDestination
 import com.dxn.drawfull.ui.theme.DrawFullTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -61,6 +64,7 @@ fun Start(navigator: DestinationsNavigator) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Destination
 fun ImageAnnotator(navigator: DestinationsNavigator, imageUri: Uri) {
@@ -72,7 +76,9 @@ fun ImageAnnotator(navigator: DestinationsNavigator, imageUri: Uri) {
             22f
         )
     }
-    ImageAnnotationCanvas(imageUri = imageUri, polygonDrawer = polygonDrawer)
+//    ImageAnnotationCanvas(imageUri = imageUri, polygonDrawer = polygonDrawer)
+    val painter = rememberImagePainter(data = imageUri)
+    ZoomableImage(painter = painter)
 }
 
 
