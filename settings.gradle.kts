@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "DrawFull"
 include(":app")
+include(":drawfull")

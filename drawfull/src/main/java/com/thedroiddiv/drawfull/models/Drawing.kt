@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Divyansh Kushwaha <divyanshdxn@gmail.com>
+ * Copyright (c) 2022 Divyansh Kushwaha <thedroiddiv@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull.drawing.helper
+package com.thedroiddiv.drawfull.models
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import com.thedroiddiv.drawfull.utils.DrawingStroke
+import com.thedroiddiv.drawfull.utils.calculateDistance
+import com.thedroiddiv.drawfull.utils.calculateMidPoint
+import com.thedroiddiv.drawfull.utils.getVertices
 
 class Drawing(
     private var _color: Color,
@@ -121,12 +125,3 @@ class Drawing(
     fun setDrawMode(drawMode: DrawMode) = run { this._drawMode.value = drawMode }
 }
 
-@Composable
-fun rememberDrawing(
-    color: Color = Color.Red,
-    width: Float = 4f,
-    alpha: Float = 1f,
-    drawMode: DrawMode = DrawMode.FREE_HAND
-): Drawing {
-    return remember { Drawing(color, width, alpha, drawMode) }
-}

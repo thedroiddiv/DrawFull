@@ -27,10 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.dxn.drawfull.color.ColorPicker
-import com.dxn.drawfull.color.colors
-import com.dxn.drawfull.drawing.components.FreeHandCanvas
-import com.dxn.drawfull.drawing.helper.rememberDrawing
+import com.thedroiddiv.drawfull.DrawingCanvas
+import com.thedroiddiv.drawfull.components.rememberDrawing
 
 @Composable
 fun DrawingScreen() {
@@ -53,7 +51,7 @@ fun DrawingScreen() {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
     ) {
-        FreeHandCanvas(
+        DrawingCanvas(
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f),
@@ -109,8 +107,8 @@ fun DrawingScreen() {
                 boxHeightPx = it.size.height.toFloat()
             }
             ) {
-                ColorPicker(
-                    colors = colors,
+                com.thedroiddiv.drawfull.components.ColorPicker(
+                    colors = com.thedroiddiv.drawfull.colors.colors,
                     selectedColor = drawing.color,
                     onColorPicked = {
                         drawing.setColor(it)

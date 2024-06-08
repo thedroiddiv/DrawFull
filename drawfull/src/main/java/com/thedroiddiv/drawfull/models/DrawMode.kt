@@ -15,21 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import com.dxn.drawfull.ui.App
-import com.dxn.drawfull.ui.theme.DrawFullTheme
+package com.thedroiddiv.drawfull.models
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            DrawFullTheme {
-                App()
-            }
-        }
-    }
+sealed class DrawMode {
+    data object FREE_HAND : DrawMode()
+    data object SQUARE : DrawMode()
+    data object CIRCLE : DrawMode()
+    class POLYGON(val sides: Int) : DrawMode()
+    data object RECTANGLE : DrawMode()
 }

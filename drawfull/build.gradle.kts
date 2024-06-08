@@ -1,24 +1,19 @@
 plugins {
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.androidApplication)
     alias(libs.plugins.compose.compiler)
+
 }
 
 android {
-    namespace = ("com.dxn.drawfull")
+    namespace = "com.thedroiddiv.drawfull"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = ("com.dxn.drawfull")
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
-        testInstrumentationRunner = ("androidx.test.runner.AndroidJUnitRunner")
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -40,20 +35,9 @@ android {
     buildFeatures {
         compose = true
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-
-    implementation(project(":drawfull"))
-
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)
     implementation(libs.compose.ui)

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Divyansh Kushwaha <divyanshdxn@gmail.com>
+ * Copyright (c) 2022 Divyansh Kushwaha <thedroiddiv@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull.drawing.helper
+package com.thedroiddiv.drawfull.utils
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path

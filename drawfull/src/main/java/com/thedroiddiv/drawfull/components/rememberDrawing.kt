@@ -15,21 +15,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull
+package com.thedroiddiv.drawfull.components
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import com.dxn.drawfull.ui.App
-import com.dxn.drawfull.ui.theme.DrawFullTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import com.thedroiddiv.drawfull.models.DrawMode
+import com.thedroiddiv.drawfull.models.Drawing
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            DrawFullTheme {
-                App()
-            }
-        }
-    }
+@Composable
+fun rememberDrawing(
+    color: Color = Color.Red,
+    width: Float = 4f,
+    alpha: Float = 1f,
+    drawMode: DrawMode = DrawMode.FREE_HAND
+): Drawing {
+    return remember { Drawing(color, width, alpha, drawMode) }
 }

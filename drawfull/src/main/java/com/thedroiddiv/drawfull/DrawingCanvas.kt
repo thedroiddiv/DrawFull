@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Divyansh Kushwaha <divyanshdxn@gmail.com>
+ * Copyright (c) 2022 Divyansh Kushwaha <thedroiddiv@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull.drawing.components
+package com.thedroiddiv.drawfull
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -27,12 +27,11 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import com.dxn.drawfull.drawing.helper.Drawing
-import com.dxn.drawfull.drawing.helper.DrawingStroke
-import com.dxn.drawfull.drawing.helper.drawQuadraticBezier
+import com.thedroiddiv.drawfull.models.Drawing
+import com.thedroiddiv.drawfull.utils.drawQuadraticBezier
 
 @Composable
-fun FreeHandCanvas(
+fun DrawingCanvas(
     modifier: Modifier,
     drawing: Drawing
 ) {
@@ -52,7 +51,7 @@ fun FreeHandCanvas(
 
         drawing.strokes.forEach { stroke ->
             when (stroke) {
-                is DrawingStroke.FreeHand -> {
+                is com.thedroiddiv.drawfull.utils.DrawingStroke.FreeHand -> {
                     drawPath(
                         Path().apply { drawQuadraticBezier(stroke.points) },
                         color = stroke.color,
@@ -65,7 +64,7 @@ fun FreeHandCanvas(
                     )
                 }
 
-                is DrawingStroke.Polygon -> {
+                is com.thedroiddiv.drawfull.utils.DrawingStroke.Polygon -> {
                     drawPath(
                         Path().apply { drawQuadraticBezier(stroke.points) },
                         color = stroke.color,
@@ -78,7 +77,7 @@ fun FreeHandCanvas(
                     )
                 }
 
-                is DrawingStroke.Rectangle -> {
+                is com.thedroiddiv.drawfull.utils.DrawingStroke.Rectangle -> {
                     drawRect(
                         color = stroke.color,
                         topLeft = stroke.topLeft,
@@ -91,7 +90,7 @@ fun FreeHandCanvas(
                     )
                 }
 
-                is DrawingStroke.Square -> {
+                is com.thedroiddiv.drawfull.utils.DrawingStroke.Square -> {
                     drawRect(
                         color = stroke.color,
                         topLeft = stroke.topLeft,
@@ -104,7 +103,7 @@ fun FreeHandCanvas(
                     )
                 }
 
-                is DrawingStroke.Circle -> {
+                is com.thedroiddiv.drawfull.utils.DrawingStroke.Circle -> {
                     drawCircle(
                         color = stroke.color,
                         radius = stroke.radius,

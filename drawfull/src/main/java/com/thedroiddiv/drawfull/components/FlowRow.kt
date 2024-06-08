@@ -1,7 +1,7 @@
 // Credits: Vsevolod Ganin
 // https://gist.github.com/vganin/081b535f0c21b6fcf43c7a71bde91bdd
 
-package com.dxn.drawfull.color
+package com.thedroiddiv.drawfull.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment

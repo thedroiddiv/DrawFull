@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.dxn.drawfull.R
-import com.dxn.drawfull.drawing.helper.DrawMode
+import com.thedroiddiv.drawfull.models.DrawMode
 
 @Composable
 fun DrawModeSelector(

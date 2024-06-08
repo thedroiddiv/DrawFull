@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Divyansh Kushwaha <divyanshdxn@gmail.com>
+ * Copyright (c) 2022 Divyansh Kushwaha <thedroiddiv@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.dxn.drawfull.color
+package com.thedroiddiv.drawfull.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,12 +23,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dxn.drawfull.ui.theme.DrawFullTheme
+import com.thedroiddiv.drawfull.colors.colors
 
 @Composable
 fun ColorPicker(
@@ -56,11 +60,9 @@ fun ColorPicker(
 @Preview
 @Composable
 fun ColorPickerPrev() {
-    DrawFullTheme {
-        var selectedColor by remember { mutableStateOf(colors[0]) }
-        ColorPicker(
-            colors = colors,
-            selectedColor = selectedColor,
-            onColorPicked = { selectedColor = it })
-    }
+    var selectedColor by remember { mutableStateOf(colors[0]) }
+    ColorPicker(
+        colors = colors,
+        selectedColor = selectedColor,
+        onColorPicked = { selectedColor = it })
 }
