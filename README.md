@@ -112,14 +112,6 @@ drawing.setDrawMode(DrawMode.CIRCLE)
 | `setAlpha()`     | Set stroke transparency                 |
 | `setDrawMode()`  | Set current drawing mode                |
 
-
-
-## 📸 Screenshot
-
-> _You can add an image or GIF of your UI in action here._
-
----
-
 ## 📄 License
 
 MIT License.  
