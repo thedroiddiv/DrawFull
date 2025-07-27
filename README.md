@@ -114,5 +114,5 @@ drawing.setDrawMode(DrawMode.CIRCLE)
 
 ## 📄 License
 
-MIT License.  
+GNU GENERAL PUBLIC LICENSE
 Copyright © 2025 [@thedroiddiv](https://github.com/thedroiddiv)
